@@ -1,0 +1,32 @@
+#######################################
+# Syntax Coloring Map For Modem
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+#######################################
+# Methods and Functions 
+#######################################
+
+Modem(KEYWORD2)
+closeWebSiteSocket(KEYWORD2)
+int16_t getHttp(KEYWORD2,KEYWORD3,KEYWORD4,KEYWORD5, KEYWORD6)
+String getIp(KEYWORD2)
+int16_t getSignalStrength(KEYWORD2)
+isConnected()
+isNetworkOutage()
+initalizeModem(KEYWORD2)
+openWebSiteSocket(KEYWORD2)
+sendHttpPost(KEYWORD2,KEYWORD3,KEYWORD4,KEYWORD5,KEYWORD6,KEYWORD7,KEYWORD8)
+sendAtCommand(KEYWORD2, String &result)
+sendSmsMessage(KEYWORD2,const String &msmMessage)
+setModemSpeed(KEYWORD2)
+setUserAgent(KEYWORD2)
+startModem()
+stopModem()
+
+#######################################
+# Constants (LITERAL1)
+#######################################
