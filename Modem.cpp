@@ -18,7 +18,8 @@
 
 #include "Modem.h"
 
-Modem::Modem(Stream &vModemSerial) {
+Modem::Modem(Stream &vD,Stream &vModemSerial) {
+	DebugSerial = &vD;
 	ModemSerial = &vModemSerial; // Stream for where to send commands to Modem
 	// Configure I/O pin 12 as output
 	pinMode(MSM_ON_OFF, OUTPUT);
@@ -284,7 +285,7 @@ int16_t Modem::closeWebSiteSocket(const int8_t &vSocket) {
 }
 /*
  * Get http from a server (Returns "ERROR" if an error occurs)
- * Have your sever respond with the token lock before and after the result that you want to
+ * Have your server respond with the token lock before and after the result that you want to
  * receive. This isolates the data so you only get the information you want and not the headers.
  * It also adds security as someone would need to know your token lock in order to send and recieve.
  */
@@ -375,10 +376,10 @@ int16_t Modem::sendHttpPost(const int8_t &vSocket, const String &vSite,
 		// Send the data
 		ModemSerial->print(vData);
 		// Return the result (Set the delay to 12 seconds)
-//		error = getResult(result,12);
 		error = getHttp(tokenLock, result);
+//		justPrintModemResponse();
 		ModemSerial->print("+++");
-//		Serial.print(result);
+//		DebugSerial->print(result);
 // WE NEED TO DOUBLE CHECK ON THE TIMING OF THE RETURN OF THE NO CARRIOR (3)
 		String resultDone = "";
 		// Check to make sure the response was ok
@@ -430,22 +431,6 @@ bool Modem::sendAtCommand(const String &atCommand, String &result) {
 		if (error == -2 || error == 0) {
 			return true;
 		}
-	}
-	return false;
-}
-bool Modem::setModemSpeed(uint32_t vSpeed) {
-	ModemSerial->print("AT+IPR=");
-	String speed = (String) vSpeed;
-	//DebugSerial->print("Speed = ");//DebugSerial->println(speed);
-	ModemSerial->println(speed);
-	String result = "";
-	getResult(result, MIN_TIMEOUT);
-	//DebugSerial->println("Speeds are:");
-	//DebugSerial->println(result);
-	// Store Data to profile and extended profile
-	ModemSerial->println("AT&W");
-	if (getResult(result, MIN_TIMEOUT) == 0) {
-		return true;
 	}
 	return false;
 }
@@ -753,7 +738,7 @@ int8_t Modem::justPrintModemResponse() {
 	};
 	testTime = millis();
 	while (ModemSerial->available() > 0) {
-		Serial.print(char(ModemSerial->read()));
+		DebugSerial->print(char(ModemSerial->read()));
 		// If the modem serial has more then 8 in the buffer, pause the modem till we can read all data
 		if (ModemSerial->available() > 16) {
 			// Bring the line high to pause output
@@ -761,7 +746,7 @@ int8_t Modem::justPrintModemResponse() {
 			uint32_t testTime2 = millis();
 			// Read the data until the buffer is empty
 			while (ModemSerial->available() > 0) {
-				Serial.print(char(ModemSerial->read()));
+				DebugSerial->print(char(ModemSerial->read()));
 				// If we go over MIN_TIMEOUT seconds return a failure of connecting
 				if (isTimedOut(testTime2, vdelay * 1000)) {
 					return -1;
@@ -777,32 +762,32 @@ int8_t Modem::justPrintModemResponse() {
 		}
 		delay(MIN_WAIT_TIME);
 	}
-	Serial.println();
+	DebugSerial->println();
 	return 0;
 }
 // Prints a Hex representation of the string for debugging
 void Modem::printHex(const String &hex) {
-	Serial.println("Starting HEX");
+	DebugSerial->println("Starting HEX");
 	char a;
 	for (uint8_t i = 0; i <= hex.length(); i++) {
 		a = hex[i];
-		Serial.print(a, HEX);
-		Serial.print(" ");
+		DebugSerial->print(a, HEX);
+		DebugSerial->print(" ");
 	}
-	Serial.println("");
-	Serial.println("Done HEX");
+	DebugSerial->println("");
+	DebugSerial->println("Done HEX");
 }
 // Prints a Hex representation of the string for debugging
 void Modem::printDec(const String &hex) {
-	Serial.println("Starting HEX");
+	DebugSerial->println("Starting HEX");
 	char a;
 	for (uint8_t i = 0; i <= hex.length(); i++) {
 		a = hex[i];
-		Serial.print(a, DEC);
-		Serial.print(" ");
+		DebugSerial->print(a, DEC);
+		DebugSerial->print(" ");
 	}
-	Serial.println("");
-	Serial.println("Done HEX");
+	DebugSerial->println("");
+	DebugSerial->println("Done HEX");
 }
 #endif
 

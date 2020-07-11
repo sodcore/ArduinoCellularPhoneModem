@@ -21,7 +21,8 @@
 #include "Arduino.h"
 #include "../messages/Messages.h"
 #include "EquipmentInformation.h"
-#include "CoordinatorInformation.h"
+#include "../PCB_V0_1.h"
+#include "ModemSpecs.h"
 #include <string.h>
 
 #define MIN_WAIT_TIME 100 // Number of milliseconds to wait for response
@@ -39,7 +40,8 @@
 #define DEBUG 1
 class Modem {
 public:
-	Modem(Stream &vModemSerial); // Constructor for the class
+	Modem(Stream &vD,Stream &vModemSerial); // Constructor for the class
+	Stream *DebugSerial;
 	~Modem(); // Deconstructor for the class
 	int8_t isConnected(); // Checks to see if the modem is connected to network and modem is online
 	bool isNetworkOutage() {
@@ -97,7 +99,6 @@ public:
 	// Used to send SMS messages to a phone number without country code (North America only) (Error -3 = Message too long)
 	int16_t sendSmsMessage(const String &phoneNumber, const String &msmMessage);bool sendAtCommand(
 			const String &atCommand, String &result); // Send at command to modem
-	bool setModemSpeed(uint32_t vSpeed);
 	int8_t restModem(); // Reset the modem to profile settings
 	void resetEmergency(); // Reset modem with rstPin (Does not gracefully exit the network)
 	int8_t restModemToFactory(); // Reset the modem to default setting

@@ -19,14 +19,22 @@
 #ifndef COORDINATORINFORMATION_H_
 #define COORDINATORINFORMATION_H_
 
-#define MSM_ON_OFF 12
-#define MSM_RTS 11
-#define MSM_DTR 10
-#define MSM_nRESET 9
-/*
- * This is set to pin 8 eventhough the skywire shield does not use it as we need to define a pin
- * as if it used, as we can connect the pin if connected to PCB
- */
-#define MSM_CTS 8
+//#define MSM_ON_OFF 12
+//#define MSM_RTS 11
+//#define MSM_DTR 10
+//#define MSM_nRESET 9
+///*
+// * This is set to pin 8 eventhough the skywire shield does not use it as we need to define a pin
+// * as if it used, as we can connect the pin if connected to PCB
+// */
+//#define MSM_CTS 8
+
+// #define Modem Pin Set
+//#define SerialModem Serial1
+//#define MSM_ON_OFF 14 // confirmed
+//#define MSM_CTS 3 // confirmed
+//#define MSM_RTS 15 // confirmed
+//#define MSM_DTR 4 // confirmed
+//#define MSM_nRESET 13 // confirmed
 
 #endif /* MODEMPINS_H_ */
