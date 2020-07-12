@@ -19,9 +19,8 @@
 #ifndef MODEM_H_
 #define MODEM_H_
 #include "Arduino.h"
-#include "../messages/Messages.h"
 #include "EquipmentInformation.h"
-#include "../PCB_V0_1.h"
+#include "PCB_V0_1.h"
 #include "ModemSpecs.h"
 #include <string.h>
 

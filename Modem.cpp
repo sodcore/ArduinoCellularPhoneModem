@@ -101,7 +101,7 @@ int8_t Modem::initalizeModem(const String &apnNumber) {
 int8_t Modem::startModem() {
 	powerModem();
 	// If we are connected return success
-//	if(isConnected() == 0)
+	if(isConnected() == 0)
 	{
 		networkOutage = false;
 		return 0;
@@ -482,7 +482,6 @@ int8_t Modem::isModemOnline() {
 	while (goodResp == 4) {
 		ModemSerial->println("AT");
 		int8_t errorCode = getResult(result, MIN_TIMEOUT);
-		//DebugSerial->print("Result = ");//DebugSerial->println(result);
 		result.trim();
 		result = result.substring(result.length() - 2, result.length());
 		// Test to make sure the result sends the correct error code
