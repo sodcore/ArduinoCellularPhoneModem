@@ -14,6 +14,6 @@ Nimble Link SkyWire Shield. www.niblelink.com and then plugging in the modem.
  shield with serial pins 18 and 19 on the mega for Serial1)
  
  
-  For use of the modem you can view my tuturial on You-Tube at 
+  For use of the modem you can view my tuturial on You-Tube at https://www.youtube.com/watch?v=acXN_uDP5ow
 
 Donald Boissonneault  <forum@sodore.com> - Jan 2019
