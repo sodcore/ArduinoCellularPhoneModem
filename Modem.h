@@ -19,8 +19,9 @@
 #ifndef MODEM_H_
 #define MODEM_H_
 #include "Arduino.h"
+#include "../messages/Messages.h"
 #include "EquipmentInformation.h"
-#include "PCB_V0_1.h"
+#include "../PCB_V0_1.h"
 #include "ModemSpecs.h"
 #include <string.h>
 
@@ -96,8 +97,8 @@ public:
 			const uint16_t vPort, const String vDestinationFolder,
 			const String &vData, const String &tokenLock, String &result);
 	// Used to send SMS messages to a phone number without country code (North America only) (Error -3 = Message too long)
-	int16_t sendSmsMessage(const String &phoneNumber, const String &msmMessage);bool sendAtCommand(
-			const String &atCommand, String &result); // Send at command to modem
+	int16_t sendSmsMessage(const String &destinationPhoneNumber,const String &phoneNumber, const String &msmMessage);
+	bool sendAtCommand(const String &atCommand, String &result); // Send at command to modem
 	int8_t restModem(); // Reset the modem to profile settings
 	void resetEmergency(); // Reset modem with rstPin (Does not gracefully exit the network)
 	int8_t restModemToFactory(); // Reset the modem to default setting

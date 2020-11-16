@@ -101,7 +101,7 @@ int8_t Modem::initalizeModem(const String &apnNumber) {
 int8_t Modem::startModem() {
 	powerModem();
 	// If we are connected return success
-	if(isConnected() == 0)
+//	if(isConnected() == 0)
 	{
 		networkOutage = false;
 		return 0;
@@ -389,36 +389,52 @@ int16_t Modem::sendHttpPost(const int8_t &vSocket, const String &vSite,
 	}
 	return 4;
 }
-// Used to send SMS messages to a phone number without country code (North America only) (Error -3 = Message too long)
-int16_t Modem::sendSmsMessage(const String &phoneNumber,
+// Used to send SMS messages to a phone number with country code (Error -3 = Message too long)
+int16_t Modem::sendSmsMessage(const String &countryCode,const String &phoneNumber,
 		const String &msmMessage) {
 	// check SMS message length and trim to 160 bytes if necessary
 	if (msmMessage.length() > 160) {
-		return 4;
+		return -3;
 	}
-	String result = "";
-	// put modem into text mode
-	ModemSerial->println("AT+CMGF=1");
-	// Check to make sure we were able to put the modem into text mode
-	if (getResult(result, MIN_TIMEOUT) == 0) {
-		{
-			// assemble SMS message and send
-			ModemSerial->print("AT+CMGS=\"");
-			ModemSerial->print(DESTINATION_PHONE_NUMBER_PREFIX);
-			ModemSerial->print(phoneNumber);
-			ModemSerial->print("\"\r");
-			getResult(result, 12);
-			if (result.startsWith("\r\n>")) {
-				ModemSerial->print(msmMessage);
-				ModemSerial->write(26); // special "CTRL-Z" character
-				ModemSerial->write("\r");
+	uint8_t loopCount = 0;
+	int8_t a = 0;
+	while (a != -1)
+	{
+		String result = "";
+		// put modem into text mode
+		ModemSerial->println("AT+CMGF=1");
+		// Check to make sure we were able to put the modem into text mode
+		if (getResult(result, MIN_TIMEOUT) == 0) {
+			{
+				// assemble SMS message and send
+				ModemSerial->print("AT+CMGS=\"");
+				ModemSerial->print(countryCode);
+				ModemSerial->print(phoneNumber);
+				ModemSerial->print("\"\r");
 				getResult(result, 12);
-				if (result.startsWith("\0x1A")) {
-					// let user know message has been sent
-					int8_t a = getResult(result, MIN_TIMEOUT);
-					return a;
+				if (result.startsWith("\r\n>")) {
+					ModemSerial->print(msmMessage);
+					ModemSerial->write(26); // special "CTRL-Z" character
+					ModemSerial->write("\r");
+					getResult(result, 12);
+					if (result.startsWith("\0x1A")) {
+						// let user know message has been sent
+						int8_t a = getResult(result, MIN_TIMEOUT);
+						//DebugSerial->print("RESULT = ");DebugSerial->println(result);
+						//DebugSerial->print("a = ");DebugSerial->println(a);
+						// If it is a sms message test for success
+						if(result.startsWith("+CMGS:"))
+						{
+							return 0;
+						}
+					}
 				}
 			}
+		}
+		loopCount ++;
+		if (loopCount == 10)
+		{
+			break;
 		}
 	}
 	return 4;
@@ -482,6 +498,7 @@ int8_t Modem::isModemOnline() {
 	while (goodResp == 4) {
 		ModemSerial->println("AT");
 		int8_t errorCode = getResult(result, MIN_TIMEOUT);
+		//DebugSerial->print("Result = ");//DebugSerial->println(result);
 		result.trim();
 		result = result.substring(result.length() - 2, result.length());
 		// Test to make sure the result sends the correct error code
@@ -644,7 +661,7 @@ int8_t Modem::getResult(String &verboseResult, const uint32_t &vdelay) {
 		}
 		// If we go over MIN_TIMEOUT seconds return a failure of connecting
 		if (isTimedOut(testTime, vdelay * 1000)) {
-			//DebugSerial->println("Timed out on three");
+			//DebugSerial->println("***************************************************");DebugSerial->println("Timed out on three");
 			return -1;
 		}
 		delay(MIN_WAIT_TIME);
