@@ -75,7 +75,7 @@ void setup()
 	DebugSerial.print("Signal = ");DebugSerial.println(signal);
 	DebugSerial.print("rssi = ");DebugSerial.println(rssi);
 	String phoneNumber = "5555555555";
-	modem->sendSmsMessage(phoneNumber,"Hello World again");
+	modem->sendSmsMessage("+1",phoneNumber,"Hello World again");
 	DebugSerial.print("isConnected()");DebugSerial.println(modem->isConnected());
 	DebugSerial.print("isNetworkOutage()");DebugSerial.println(modem->isNetworkOutage());
 	DebugSerial.print("openWebSocket()");DebugSerial.println(modem->openWebSiteSocket(1));
