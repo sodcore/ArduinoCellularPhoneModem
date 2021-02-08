@@ -21,7 +21,8 @@
 #include "Arduino.h"
 #include "../messages/Messages.h"
 #include "EquipmentInformation.h"
-#include "../PCB_V0_1.h"
+//#include "../PCB_V0_1.h"
+#include "CoordinatorInformation.h"
 #include "ModemSpecs.h"
 #include <string.h>
 
