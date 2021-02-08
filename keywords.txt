@@ -11,20 +11,19 @@
 #######################################
 
 Modem(KEYWORD2)
-closeWebSiteSocket(KEYWORD2)
-int16_t getHttp(KEYWORD2,KEYWORD3,KEYWORD4,KEYWORD5, KEYWORD6)
-String getIp(KEYWORD2)
-int16_t getSignalStrength(KEYWORD2)
-isConnected()
-isNetworkOutage()
-initalizeModem(KEYWORD2)
-openWebSiteSocket(KEYWORD2)
-sendHttpPost(KEYWORD2,KEYWORD3,KEYWORD4,KEYWORD5,KEYWORD6,KEYWORD7,KEYWORD8)
-sendAtCommand(KEYWORD2, String &result)
-sendSmsMessage(KEYWORD2,const String &msmMessage)
-setUserAgent(KEYWORD2)
-startModem()
-stopModem()
+int8_t initalizeModem(KEYWORD1)
+int8_t getIMEI(KEYWORD1)
+int8_t getPhoneNumber(KEYWORD1)
+int16_t getSignalStrength(KEYWORD1)
+int8_t getSimId(SKEYWORD1)
+String getIp(KEYWORD1)
+void setUserAgent(KEYWORD1)
+int16_t openWebSiteSocket(KEYWORD1)
+int16_t closeWebSiteSocket(KEYWORD1)
+int16_t getHttp(KEYWORD1,KEYWORD2,KEYWORD3,KEYWORD4,KEYWORD5,KEYWORD6);
+int16_t sendHttpPost(KEYWORD1,KEYWORD2,KEYWORD3,KEYWORD4,KEYWORD5,KEYWORD6,KEYWORD7);
+int16_t sendSmsMessage(KEYWORD1,KEYWORD2,KEYWORD3);
+bool sendAtCommand(KEYWORD1,KEYWORD2);
 
 #######################################
 # Constants (LITERAL1)

@@ -23,11 +23,12 @@
 //#define NL_SW_HSPAPG	    // AT&T/T-Mobile 3G Modem w/ GPS
 //#define NL_SW_HSPAPE	    // GSM 3G Modem, EU
 //#define NL_SW_LTE_TSVG    // Verizon 4G LTE Modem
-#define NL_SW_LTE_TNAG    // AT&T/T-Mobile 4G LTE Modem
+//#define NL_SW_LTE_TNAG    // AT&T/T-Mobile 4G LTE Modem
 //#define NL_SW_LTE_TEUG    // GSM 4G LTE Modem, EU
+#define NL-SW-LTE-TC4NAG // Bell mobility , TNAG new modem
 
 // "+1" needed before phone number on certain modems
-#if defined NL_SW_LTE_TSVG || defined NL_SW_LTE_TNAG || defined NL_SW_LTE_TEUG
+#if defined NL_SW_LTE_TSVG || defined NL_SW_LTE_TNAG || defined NL_SW_LTE_TEUG || defined NL-SW-LTE-TC4NAG
 	#define DESTINATION_PHONE_NUMBER_PREFIX "+1"
 #else
 	#define DESTINATION_PHONE_NUMBER_PREFIX ""

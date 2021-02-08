@@ -36,8 +36,8 @@
  * -2 IS VERBAL RETURN
  */
 
-// Define DEBUG for when we are fine tunning the program and need to use debugging tools
-#define DEBUG 1
+// Define DEBUG for when we are fine tuning the program and need to use debugging tools
+#define DEBUG 0
 class Modem {
 public:
 	Modem(Stream &vD,Stream &vModemSerial); // Constructor for the class
@@ -54,15 +54,29 @@ public:
 	 */
 	int8_t startModem();
 	void stopModem(); // Shut down the modem
-	// Get current Gps location of device
-	bool getGpsLocation();
+//	// Get current Gps location of device
+//	bool getGpsLocation();
+	/*
+	 * Get the IMEI of the modem
+	 * returns 0 on success and 4 on failure
+	 */
+	int8_t getIMEI(String &imei);
+	/*
+	 * Get the phone number of the sim card
+	 * returns 0 on success and 4 on failure
+	 */
+	int8_t getPhoneNumber(String &phoneNumber);
 	// Get the signal strength and set the quality in &signalQuality (Will return -1 on error)
-	int16_t getSignalStrength(int8_t &signalQuality);
+	int16_t getSignalStrength(int8_t &signalQuality);\
+	/*
+	 * Get the Sim id ( the numbers written on the SIM card
+	 * returns 0 on success and 4 on failure
+	 */
+	int8_t getSimId(String &simId);
 	// Get the Ip of specified Socket
 	String getIp(const int8_t &vSocket) {
 		return ip[vSocket];
 	}
-	;
 	/*
 	 * Get an ftp file from the server (File Type 0= binary, 1 = ASCII)
 	 * This function has not been tested and is not completed

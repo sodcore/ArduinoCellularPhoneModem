@@ -118,7 +118,7 @@ void Modem::stopModem() {
 	delay(2000);
 
 }
-bool Modem::getGpsLocation() {
+//bool Modem::getGpsLocation() {
 //	String result = "";
 //	ModemSerial->println("AT$GPSSLSR=2,3,,,,,1");
 //	justPrintModemResponse();
@@ -129,7 +129,39 @@ bool Modem::getGpsLocation() {
 //		//DebugSerial->print("Gps=");//DebugSerial->println(result);
 //		return true;
 //	}
-	return false;
+//	return false;
+//}
+/*
+ * Get the IMEI of the modem
+ * returns 0 on success and 4 on failure
+ */
+int8_t Modem::getIMEI(String &imei)
+{
+	int8_t errorCode = 4;
+	// Get IMEI of modem
+	ModemSerial->println("AT+CGSN");
+	String result = "";
+	errorCode = getResult(result, MIN_TIMEOUT);
+	imei = result.substring(0, result.length() - 4);
+	if(imei.length() == 15 && errorCode == -2)
+	{
+		return 0;
+	} else
+	{
+		return 4;
+	}
+}
+/*
+ * Get the phone number of the sim card
+ * returns 0 on success and 4 on failure, it also adds the error to the Messages error log
+ */
+int8_t Modem::getPhoneNumber(String &phoneNumber)
+{
+	int8_t errorCode = -1;
+//	ModemSerial->println("AT+CNUM");
+//	DebugSerial->println("AT+CNUM");
+//	errorCode = justPrintModemResponse();
+	return errorCode;
 }
 // Get the signal strength and set the quality in &signalQuality (Will return -1 on error)
 /*
@@ -181,6 +213,27 @@ int16_t Modem::getSignalStrength(int8_t &signalQuality) {
 	// Else return internal error code -1
 	signalQuality = -1;
 	return -1;
+}
+/*
+ * Get the Sim id ( the numbers written on the SIM card
+ * returns 0 on success and 4 on failure
+ */
+int8_t Modem::getSimId(String &simId)
+{
+	int8_t errorCode = 4;
+	// Get SIM card ID
+	ModemSerial->println("AT#CCID");
+	DebugSerial->println("AT#CCID");
+	String result = "";
+	errorCode = getResult(result, MIN_TIMEOUT);
+	simId = result.substring(7, result.length() - 4);
+	if(errorCode == -2)
+	{
+		return 0;
+	} else
+	{
+		return 4;
+	}
 }
 /*
  * Get an ftp file from the server (File Type 0= binary, 1 = ASCII)
@@ -518,8 +571,10 @@ int8_t Modem::isNetworkConnected() {
 	uint32_t testTime = millis();
 	// initialize a few variables
 	int8_t connectionGood = 4;
+	uint8_t loopCountBreak = 0;
 	// Check for network connection
-	while (connectionGood == 4) {
+	while (connectionGood == 4 && loopCountBreak < 10) {
+		loopCountBreak ++;
 		// send command to modem to get network status
 		ModemSerial->println("AT+CGREG?");
 		String result = "";
@@ -529,10 +584,9 @@ int8_t Modem::isNetworkConnected() {
 				|| (result.substring(result.length() - 7, result.length() - 4)
 						== "0,5")) {
 			connectionGood = 0;
-		}
-		// If we go over MIN_TIMEOUT seconds return a failure of connecting
-		if (isTimedOut(testTime, MIN_CHECK_NETWORK_TIMEOUT)) {
-			return 4;
+		} else
+		{
+		//	DebugSerial->println("No network");
 		}
 	}
 	return connectionGood;
